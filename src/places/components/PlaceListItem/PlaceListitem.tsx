@@ -3,6 +3,7 @@ import './PlaceListItem.css'
 import Card from "../../../shared/components/UIElements/Card/Card";
 import Button from "../../../shared/components/FormElements/Button/Button";
 import Modal from "../../../shared/components/UIElements/Modal/Modal";
+import Map from "../../../shared/components/UIElements/Map/Map";
 
 interface IProps {
   id: string,
@@ -39,7 +40,7 @@ const PlaceListItem: FC<IProps> = ({
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
       >
         <div className='map-container'>
-          <h2>This is a map!!!</h2>
+          <Map center={coordinates} zoom={16}/>
         </div>
       </Modal>
       <li className='place-item' key={id}>
