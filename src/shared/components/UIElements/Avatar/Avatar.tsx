@@ -1,7 +1,16 @@
-import React, {FC} from "react";
+import React, {CSSProperties, FC} from "react";
 import './Avatar.css'
 
-const Avatar: FC<any> = (props) => {
+interface IAvatar {
+  className?: string,
+  style?: CSSProperties,
+  image: string,
+  alt: string,
+  width?: string,
+  height?: string
+}
+
+const Avatar: FC<IAvatar> = (props) => {
   return (
     <div className={`avatar ${props.className}`} style={props.style}>
       <img

@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 import {CSSTransition} from "react-transition-group";
 import './SideDrawer.css';
 
-const SideDrawer: FC<any> = ({children, show, onClick}) => {
+interface ISideDrawer {
+  show: boolean,
+  onClick: () => void
+}
+
+const SideDrawer: FC<ISideDrawer> = ({children, show, onClick}) => {
 
   const CONTENT =
     <CSSTransition

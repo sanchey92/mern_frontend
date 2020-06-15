@@ -1,10 +1,15 @@
-import React, {FC} from "react";
+import React, {CSSProperties, FC} from "react";
 import './Card.css'
 
-const Card: FC<any> = (props) => {
+type Card = {
+  className?: string,
+  style?: CSSProperties
+}
+
+const Card: FC<Card> = ({className, style, children}) => {
   return (
-    <div className={`card ${props.className}`} style={props.style}>
-      {props.children}
+    <div className={`card ${className}`} style={style}>
+      {children}
     </div>
   )
 }

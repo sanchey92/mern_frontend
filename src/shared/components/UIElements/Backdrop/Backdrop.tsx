@@ -2,7 +2,11 @@ import React, {FC} from "react";
 import ReactDOM from 'react-dom';
 import './backdrop.css'
 
-const Backdrop: FC<any> = ({onClick}) => {
+type Backdrop = {
+  onClick: any
+}
+
+const Backdrop: FC<Backdrop> = ({onClick}) => {
 
   const CONTENT =  <div className='backdrop' onClick={onClick}></div>
   // @ts-ignore
