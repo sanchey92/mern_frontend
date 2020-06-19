@@ -1,4 +1,4 @@
-import {validate} from "../../../utils/validadors/validators";
+import {validate} from "../shared/utils/validadors/validators";
 import {Reducer} from "react";
 
 export interface IInputState {
@@ -7,7 +7,7 @@ export interface IInputState {
   isTouched: boolean
 }
 
-export const initialState = {
+const initialState = {
   value: '',
   isValid: false,
   isTouched: false

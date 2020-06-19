@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import PlaceList, {Places} from "../../components/PlaceList/PlaceList";
 import { useParams } from "react-router-dom";
 
-const TESTS_DATA: Places[] = [
+export const TESTS_DATA: Places[] = [
   {
     id: 'p1',
     title: 'Empire State Building',
