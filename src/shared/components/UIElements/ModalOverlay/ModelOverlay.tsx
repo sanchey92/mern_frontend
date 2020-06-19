@@ -2,17 +2,8 @@ import React, {FC} from "react";
 import ReactDOM from "react-dom";
 import {IModal} from "../Modal/Modal";
 
-const ModalOverlay: FC<IModal> = ({
-                                    className,
-                                    style,
-                                    header,
-                                    children,
-                                    onSubmit,
-                                    contentClass,
-                                    headerClass,
-                                    footerClass,
-                                    footer
-                                  }) => {
+const ModalOverlay: FC<IModal> = (props) => {
+  const {className, style, header, children, onSubmit, contentClass, headerClass, footerClass, footer} = props
   const CONTENT =
     <div className={`modal ${className}`} style={style}>
       <header className={`modal__header ${headerClass}`}>

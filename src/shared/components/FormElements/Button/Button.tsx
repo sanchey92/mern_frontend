@@ -13,17 +13,8 @@ interface IButton {
   disabled?: boolean,
 }
 
-const Button: FC<IButton> = ({
-                               href,
-                               to,
-                               size,
-                               inverse,
-                               danger,
-                               type,
-                               onClick,
-                               disabled,
-                               children
-                             }) => {
+const Button: FC<IButton> = (props) => {
+  const {href, to, size, inverse, danger, type, onClick, disabled, children} = props
 
   if (href) {
     return (
