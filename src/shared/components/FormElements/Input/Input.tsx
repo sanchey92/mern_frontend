@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FC, useEffect, useReducer} from "react";
 import './Input.css'
-import {inputReducer} from "../../../../reducers/inputReducer";
+import {inputReducer} from "../../../reducers/inputReducer";
 
 interface IInput {
   id?: string,

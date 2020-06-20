@@ -1,4 +1,4 @@
-import {validate} from "../shared/utils/validadors/validators";
+import {validate} from "../utils/validadors/validators";
 import {Reducer} from "react";
 
 export interface IInputState {

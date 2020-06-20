@@ -17,7 +17,7 @@ interface IProps {
 
 const PlaceListItem: FC<IProps> = (props) => {
 
-  const {id, image, address, title, description, creatorId, coordinates} = props
+  const {id, image, address, title, description, coordinates} = props
 
   const [showMap, setShowMap] = useState<boolean>(false);
   const openMapHandler = () => setShowMap(true);

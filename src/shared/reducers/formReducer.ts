@@ -5,34 +5,18 @@ export type inputProperty = {
   isValid: boolean
 }
 
+export type initialInputsType = {
+  title: inputProperty,
+  address?: inputProperty
+  description: inputProperty
+}
+
 export interface IFormState {
-  inputs: {
-    title: inputProperty,
-    address: inputProperty
-    description: inputProperty
-  },
+  inputs: initialInputsType,
   isValid: boolean
 }
 
-export const initialState: IFormState = {
-  inputs: {
-    title: {
-      value: '',
-      isValid: false
-    },
-    address: {
-      value: '',
-      isValid: false
-    },
-    description: {
-      value: '',
-      isValid: false
-    }
-  },
-  isValid: false
-}
-
-export const formReducer: Reducer<IFormState, any> = (state: IFormState, actions: any): IFormState => {
+export const formReducer: Reducer<any, any> = (state: any, actions: any): IFormState => {
   switch (actions.type) {
 
     case 'INPUT_CHANGE':
