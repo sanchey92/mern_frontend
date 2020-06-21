@@ -2,6 +2,7 @@ import React, {FC} from "react";
 import './PlaceList.css'
 import Card from "../../../shared/components/UIElements/Card/Card";
 import PlaceListItem from "../PlaceListItem/PlaceListitem";
+import Button from "../../../shared/components/FormElements/Button/Button";
 
 export interface Places  {
   id: string
@@ -23,7 +24,7 @@ const PlaceList: FC<IProps> = ({items}) => {
       <div className='place-list center'>
         <Card>
           <h2>No places found. Maybe create one?</h2>
-          <button>Share Place</button>
+          <Button to='/places/new'>Share Place</Button>
         </Card>
       </div>
     )

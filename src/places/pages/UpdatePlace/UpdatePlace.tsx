@@ -1,4 +1,4 @@
-import React, {FC, FormEvent} from "react";
+import React, {FC, FormEvent, useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import {TESTS_DATA} from "../UserPlaces/UserPlaces";
 import {Places} from "../../components/PlaceList/PlaceList";
@@ -10,27 +10,46 @@ import {
 import Button from "../../../shared/components/FormElements/Button/Button";
 import {useForm} from "../../../shared/hooks/formHook/formHook";
 import '../NewPlace/NewPlace.css'
+import Card from "../../../shared/components/UIElements/Card/Card";
 
 
 type urlParams = { placeId: string }
 
 const UpdatePlace: FC = () => {
-
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const placeId = useParams<urlParams>().placeId
-  const foundPlace = TESTS_DATA.find((item: Places) => item.id === placeId)
 
-  const [formState, inputHandler] = useForm(
+  const [formState, inputHandler, setFormData] = useForm(
     {
       title: {
-        value: foundPlace!.title,
+        value: '',
         isValid: true
       },
       description: {
-        value: foundPlace!.description,
+        value: '',
         isValid: true
       }
     },
     true)
+
+  const foundPlace = TESTS_DATA.find((item: Places) => item.id === placeId)
+
+  useEffect(() => {
+    if (foundPlace) {
+      setFormData({
+        title: {
+          value: foundPlace!.title,
+          isValid: true
+        },
+        description: {
+          value: foundPlace!.description,
+          isValid: true
+        }
+      },
+        true);
+      setIsLoading(false)
+    }
+  },[setFormData, foundPlace])
 
   const updateHandler = (event: FormEvent): void => {
     event.preventDefault()
@@ -40,10 +59,19 @@ const UpdatePlace: FC = () => {
   if (!foundPlace) {
     return (
       <div className='center'>
-        <h2>Could not find place </h2>
+        <Card>
+          <h2>Could not find place </h2>
+        </Card>
       </div>
     )
   }
+
+  if (isLoading) {
+    return <div className='center'>
+      <h2>Loading...</h2>
+    </div>
+  }
+
   return (
     <form className='place-form' onSubmit={updateHandler}>
       <Input

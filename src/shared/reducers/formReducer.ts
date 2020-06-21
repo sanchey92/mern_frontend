@@ -11,12 +11,7 @@ export type initialInputsType = {
   description: inputProperty
 }
 
-export interface IFormState {
-  inputs: initialInputsType,
-  isValid: boolean
-}
-
-export const formReducer: Reducer<any, any> = (state: any, actions: any): IFormState => {
+export const formReducer: Reducer<any, any> = (state: any, actions: any) => {
   switch (actions.type) {
 
     case 'INPUT_CHANGE':
@@ -37,6 +32,13 @@ export const formReducer: Reducer<any, any> = (state: any, actions: any): IFormS
           [actions.inputId]: {value: actions.value, isValid: actions.isValid}
         },
         isValid: formIsValid
+      }
+
+    case 'SET_DATA':
+      return {
+        ...state,
+        inputs: actions.inputs,
+        isValid: actions.formIsValid
       }
 
     default:
