@@ -6,9 +6,12 @@ export type inputProperty = {
 }
 
 export type initialInputsType = {
-  title: inputProperty,
+  title?: inputProperty,
   address?: inputProperty
-  description: inputProperty
+  description?: inputProperty,
+  email?: inputProperty,
+  password?: inputProperty,
+  name?: inputProperty
 }
 
 export const formReducer: Reducer<any, any> = (state: any, actions: any) => {
@@ -17,6 +20,9 @@ export const formReducer: Reducer<any, any> = (state: any, actions: any) => {
     case 'INPUT_CHANGE':
       let formIsValid = true;
       for (const inputId in state.inputs) {
+
+        if (!state.inputs[inputId]) continue
+
         if (inputId === actions.inputId) {
           // @ts-ignore
           formIsValid = formIsValid && actions.isValid
