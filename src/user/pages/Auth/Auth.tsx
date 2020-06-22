@@ -1,4 +1,4 @@
-import React, {FC, FormEvent, useState} from "react";
+import React, {FC, FormEvent, useContext, useState} from "react";
 import './Auth.css'
 import Card from "../../../shared/components/UIElements/Card/Card";
 import Input from "../../../shared/components/FormElements/Input/Input";
@@ -9,8 +9,10 @@ import {
 } from "../../../shared/utils/validadors/actions.calidators";
 import {useForm} from "../../../shared/hooks/formHook/formHook";
 import Button from "../../../shared/components/FormElements/Button/Button";
+import {AuthContext} from "../../../shared/context/authContext";
 
 const Auth: FC = () => {
+  const auth = useContext(AuthContext)
   const [isLoginMode, setIsLoginMode] = useState<boolean>(false)
   const [formState, inputHandler, setFormData] = useForm({
     email: {
@@ -26,22 +28,25 @@ const Auth: FC = () => {
   const authSubmitHandler = (event: FormEvent) => {
     event.preventDefault()
     console.log(formState.inputs)
+    auth.login()
   }
 
   const switchModeHandler = () => {
     if (!isLoginMode) {
       setFormData({
-        ...formState.inputs,
-        name: undefined
-      }, formState.inputs.email.isValid && formState.inputs.password.isValid)
+          ...formState.inputs,
+          name: undefined
+        },
+        formState.inputs.email.isValid && formState.inputs.password.isValid)
     } else {
       setFormData({
-        ...formState.inputs,
-        name: {
-          value: '',
-          isValid: false
-        }
-      }, false)
+          ...formState.inputs,
+          name: {
+            value: '',
+            isValid: false
+          }
+        },
+        false)
     }
 
     setIsLoginMode(prevMode => !prevMode)

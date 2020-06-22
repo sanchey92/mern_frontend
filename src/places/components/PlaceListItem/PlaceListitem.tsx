@@ -1,9 +1,10 @@
-import React, {FC, useState} from "react";
+import React, {FC, useContext, useState} from "react";
 import './PlaceListItem.css'
 import Card from "../../../shared/components/UIElements/Card/Card";
 import Button from "../../../shared/components/FormElements/Button/Button";
 import Modal from "../../../shared/components/UIElements/Modal/Modal";
 import Map from "../../../shared/components/UIElements/Map/Map";
+import {AuthContext} from "../../../shared/context/authContext";
 
 interface IProps {
   id: string,
@@ -17,7 +18,7 @@ interface IProps {
 
 const PlaceListItem: FC<IProps> = (props) => {
   const {id, image, address, title, description, coordinates} = props
-
+  const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
@@ -69,8 +70,12 @@ const PlaceListItem: FC<IProps> = (props) => {
           </div>
           <div className='place-item__actions'>
             <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
-            <Button to={`/places/${id}`}>EDIT</Button>
-            <Button danger onClick={openConfirmHandler}>DELETE</Button>
+            { auth.isLoggedIn && (
+              <>
+              <Button to={`/places/${id}`}>EDIT</Button>
+              <Button danger onClick={openConfirmHandler}>DELETE</Button>
+              </>)
+            }
           </div>
         </Card>
       </li>
