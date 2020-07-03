@@ -8,7 +8,7 @@ export interface IModal {
   show: boolean,
   header: string,
   footer: ReactNode,
-  footerClass: string,
+  footerClass?: string,
   onSubmit?: () => void,
   onCancel?: () => void,
   style?: CSSProperties
