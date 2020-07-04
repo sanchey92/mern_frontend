@@ -3,7 +3,7 @@ import Modal from "../Modal/Modal";
 import Button from "../../FormElements/Button/Button";
 
 type ErrorModalType = {
-  onClear: () => void,
+  onClear: any,
   error: any,
 }
 
