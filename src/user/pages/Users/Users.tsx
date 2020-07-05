@@ -2,45 +2,35 @@ import React, {FC, useEffect, useState} from "react";
 import UserList from "../../components/UsersList/UsersList";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
 import Spinner from "../../../shared/components/UIElements/Spinner/Spinner";
+import {useHttpClient} from "../../../shared/hooks/httpHook/httpHook";
 
 const Users: FC = () => {
-
-  const [isloading, setIsLoading] = useState<boolean>(false)
-  const [error, setError] = useState(null)
+  const {isLoading, error, sendRequest, clearError} = useHttpClient()
   const [loadedUsers, setLoadedUsers] = useState(null)
 
   useEffect(() => {
 
-    const sendRequest = async () => {
-      setIsLoading(true)
+    const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/');
-        const responseData = await response.json()
-        if (!response.ok) throw new Error(responseData.message || 'Something went wrong, please try again later')
+        const responseData = await sendRequest('http://localhost:5000/api/users/');
         setLoadedUsers(responseData.users)
-
       } catch (err) {
-        setError(err.message)
       }
-      setIsLoading(false)
     }
-
-    sendRequest()
-  }, [])
-
-  const errorHandler = () => setError(null)
+    fetchUsers()
+  }, [sendRequest])
 
   return (
     <>
-      <ErrorModal onClear={errorHandler} error={error}/>
+      <ErrorModal onClear={clearError} error={error}/>
       {
-        isloading && (
+        isLoading && (
           <div className='center'>
-            <Spinner/>
+            <Spinner asOverlay/>
           </div>
         )
       }
-      {!isloading && loadedUsers && <UserList items={loadedUsers}/>}
+      {!isLoading && loadedUsers && <UserList items={loadedUsers}/>}
     </>
   )
 }

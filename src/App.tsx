@@ -8,17 +8,19 @@ import UpdatePlace from "./places/pages/UpdatePlace/UpdatePlace";
 import Auth from "./user/pages/Auth/Auth";
 import {AuthContext} from "./shared/context/authContext";
 
-
 const App: FC = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [userId, setUserId] = useState<any>(null);
 
-  const login = useCallback(() => {
+  const login = useCallback((uId: string) => {
     setIsLoggedIn(true)
+    setUserId(uId)
   }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false)
+    setUserId(null)
   }, [])
 
   let routes;
@@ -45,7 +47,7 @@ const App: FC = () => {
   }
 
   return (
-    <AuthContext.Provider value={{isLoggedIn, login, logout}}>
+    <AuthContext.Provider value={{isLoggedIn, login, logout, userId}}>
       <Router>
         <MainNavigation/>
         <main>

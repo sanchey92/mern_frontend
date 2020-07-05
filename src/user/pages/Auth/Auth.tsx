@@ -32,10 +32,13 @@ const Auth: FC = () => {
   }, false)
 
   const authSubmitHandler = async (event: FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
+
+    let responseData;
+
     if (isLoginMode) {
       try {
-        await sendRequest(
+        responseData = await sendRequest(
           'http://localhost:5000/api/users/login',
           'POST',
           {'Content-Type': 'application/json'},
@@ -44,11 +47,12 @@ const Auth: FC = () => {
             password: formState.inputs.password.value
           })
         );
-        auth.login()
-      } catch (e) {}
+         auth.login(responseData.user.id)
+      } catch (e) {
+      }
     } else {
       try {
-        await sendRequest('http://localhost:5000/api/users/signup',
+        responseData = await sendRequest('http://localhost:5000/api/users/signup',
           'POST',
           {'Content-Type': 'application/json'},
           JSON.stringify({
@@ -57,83 +61,83 @@ const Auth: FC = () => {
             password: formState.inputs.password.value
           })
         )
-        auth.login()
-      } catch (e) {}
-    }
-    }
-
-    const switchModeHandler = () => {
-      if (!isLoginMode) {
-        setFormData({
-            ...formState.inputs,
-            name: undefined
-          },
-          formState.inputs.email.isValid && formState.inputs.password.isValid)
-      } else {
-        setFormData({
-            ...formState.inputs,
-            name: {
-              value: '',
-              isValid: false
-            }
-          },
-          false)
+        auth.login(responseData.user.id)
+      } catch (e) {
       }
-
-      setIsLoginMode(prevMode => !prevMode)
     }
-
-
-    return (
-      <>
-        <ErrorModal onClear={clearError} error={error}/>
-        <Card className='authentication'>
-          {isLoading && <Spinner asOverlay/>}
-          <h2>Login Required</h2>
-          <hr/>
-          <form onSubmit={authSubmitHandler}>
-            {
-              !isLoginMode &&
-              <Input
-                element='input'
-                id='name'
-                type='text'
-                label='Your Name'
-                validators={[VALIDATOR_REQUIRE()]}
-                errorText='Please enter a name'
-                onInput={inputHandler}
-              />
-            }
-            <Input
-              element='input'
-              id='email'
-              type='email'
-              label='E-mail'
-              validators={[VALIDATOR_EMAIL()]}
-              errorText='Please enter a valid address'
-              onInput={inputHandler}
-            />
-            <Input
-              element='input'
-              id='password'
-              type='password'
-              label='Password'
-              validators={[VALIDATOR_MINLENGTH(6)]}
-              errorText='Please enter a valid password'
-              onInput={inputHandler}
-            />
-            <Button type='submit' disabled={!formState.isValid}>
-              {
-                isLoginMode
-                  ? 'LOGIN'
-                  : 'SIGNUP'
-              }
-            </Button>
-          </form>
-          <Button inverse onClick={switchModeHandler}>SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}</Button>
-        </Card>
-      </>
-    )
   }
 
-  export default Auth
+  const switchModeHandler = () => {
+    if (!isLoginMode) {
+      setFormData({
+          ...formState.inputs,
+          name: undefined
+        },
+        formState.inputs.email.isValid && formState.inputs.password.isValid)
+    } else {
+      setFormData({
+          ...formState.inputs,
+          name: {
+            value: '',
+            isValid: false
+          }
+        },
+        false)
+    }
+
+    setIsLoginMode(prevMode => !prevMode)
+  }
+
+  return (
+    <>
+      <ErrorModal onClear={clearError} error={error}/>
+      <Card className='authentication'>
+        {isLoading && <Spinner asOverlay/>}
+        <h2>Login Required</h2>
+        <hr/>
+        <form onSubmit={authSubmitHandler}>
+          {
+            !isLoginMode &&
+            <Input
+              element='input'
+              id='name'
+              type='text'
+              label='Your Name'
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText='Please enter a name'
+              onInput={inputHandler}
+            />
+          }
+          <Input
+            element='input'
+            id='email'
+            type='email'
+            label='E-mail'
+            validators={[VALIDATOR_EMAIL()]}
+            errorText='Please enter a valid address'
+            onInput={inputHandler}
+          />
+          <Input
+            element='input'
+            id='password'
+            type='password'
+            label='Password'
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            errorText='Please enter a valid password'
+            onInput={inputHandler}
+          />
+          <Button type='submit' disabled={!formState.isValid}>
+            {
+              isLoginMode
+                ? 'LOGIN'
+                : 'SIGNUP'
+            }
+          </Button>
+        </form>
+        <Button inverse onClick={switchModeHandler}>SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}</Button>
+      </Card>
+    </>
+  )
+}
+
+export default Auth

@@ -8,7 +8,7 @@ export interface Places  {
   id: string
   title: string,
   description: string,
-  imageUrl: string,
+  image: string,
   address: string,
   location: any
   creator: string,
@@ -37,7 +37,7 @@ const PlaceList: FC<IProps> = ({items}) => {
           <PlaceListItem
             key={place.id}
             id={place.id}
-            image={place.imageUrl}
+            image={place.image}
             title={place.title}
             address={place.address}
             description={place.description}

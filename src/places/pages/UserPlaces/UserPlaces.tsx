@@ -1,45 +1,44 @@
-import React, {FC} from "react";
-import PlaceList, {Places} from "../../components/PlaceList/PlaceList";
-import { useParams } from "react-router-dom";
-
-export const TESTS_DATA: Places[] = [
-  {
-    id: 'p1',
-    title: 'Empire State Building',
-    description: 'One of the most famous sky scrapers in the world!',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-    address: '20 W 34th St, New York, NY 10001',
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584
-    },
-    creator: 'u1'
-  },
-  {
-    id: 'p2',
-    title: 'Empire State Building',
-    description: 'One of the most famous sky scrapers in the world!',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-    address: '20 W 34th St, New York, NY 10001',
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584
-    },
-    creator: 'u2'
-  }
-];
+import React, {FC, useEffect, useState} from "react";
+import PlaceList from "../../components/PlaceList/PlaceList";
+import {useParams} from "react-router-dom";
+import {useHttpClient} from "../../../shared/hooks/httpHook/httpHook";
+import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
+import Spinner from "../../../shared/components/UIElements/Spinner/Spinner";
 
 interface Params {
   userId: string
 }
 
 const UserPlaces: FC = () => {
-  const userId = useParams<Params>().userId
-  const USERS_PLACES: Places[] = TESTS_DATA.filter((place: Places) => place.creator === userId )
-  return <PlaceList items={USERS_PLACES}/>
+  const userId = useParams<Params>().userId;
+  const {isLoading, error, sendRequest, clearError} = useHttpClient();
+  const [loadedPlaces, setLoadedPlaces] = useState()
 
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const responseData = await sendRequest(`http://localhost:5000/api/places/user/${userId}`);
+        setLoadedPlaces(responseData.places)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    fetchPlaces()
+  }, [sendRequest, userId])
+
+  return (
+    <>
+      <ErrorModal onClear={clearError} error={error}/>
+      {
+        isLoading && (
+          <div className='center'>
+            <Spinner/>
+          </div>
+        )
+      }
+      {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces}/>}
+    </>
+  )
 }
 
 export default UserPlaces

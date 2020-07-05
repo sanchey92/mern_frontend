@@ -26,6 +26,7 @@ const PlaceListItem: FC<IProps> = (props) => {
   const closeMapHandler = () => setShowMap(false);
   const openConfirmHandler = () => setShowConfirmModal(true);
   const closeConfirmModal = () => setShowConfirmModal(false);
+
   const confirmDeleteHandler = () => {
     setShowConfirmModal(false);
     console.log('DELETING...')
