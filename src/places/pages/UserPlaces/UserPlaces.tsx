@@ -26,6 +26,10 @@ const UserPlaces: FC = () => {
     fetchPlaces()
   }, [sendRequest, userId])
 
+  const placeDeleteHandler = (deletedPlaceId: string) => {
+    setLoadedPlaces((prevState:any) => prevState.filter((place:any) => place.id !==  deletedPlaceId))
+  }
+
   return (
     <>
       <ErrorModal onClear={clearError} error={error}/>
@@ -36,7 +40,9 @@ const UserPlaces: FC = () => {
           </div>
         )
       }
-      {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces}/>}
+      {!isLoading && loadedPlaces && <PlaceList
+        items={loadedPlaces}
+        onDeletePlace={placeDeleteHandler}/>}
     </>
   )
 }

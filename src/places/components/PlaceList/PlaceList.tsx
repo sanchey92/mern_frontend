@@ -15,10 +15,11 @@ export interface Places  {
 }
 
 interface IProps {
-  items: Places[]
+  items: Places[],
+  onDeletePlace: Function
 }
 
-const PlaceList: FC<IProps> = ({items}) => {
+const PlaceList: FC<IProps> = ({items, onDeletePlace}) => {
   if (items.length === 0) {
     return (
       <div className='place-list center'>
@@ -43,6 +44,7 @@ const PlaceList: FC<IProps> = ({items}) => {
             description={place.description}
             creatorId={place.creator}
             coordinates={place.location}
+            onDelete={onDeletePlace}
           />
           )
         })

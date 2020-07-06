@@ -5,6 +5,9 @@ import Button from "../../../shared/components/FormElements/Button/Button";
 import Modal from "../../../shared/components/UIElements/Modal/Modal";
 import Map from "../../../shared/components/UIElements/Map/Map";
 import {AuthContext} from "../../../shared/context/authContext";
+import {useHttpClient} from "../../../shared/hooks/httpHook/httpHook";
+import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
+import Spinner from "../../../shared/components/UIElements/Spinner/Spinner";
 
 interface IProps {
   id: string,
@@ -13,11 +16,13 @@ interface IProps {
   image: string,
   address: string,
   creatorId: string,
-  coordinates: any
+  coordinates: any,
+  onDelete: Function
 }
 
 const PlaceListItem: FC<IProps> = (props) => {
-  const {id, image, address, title, description, coordinates} = props
+  const {isLoading, error, sendRequest, clearError} = useHttpClient()
+  const {id, image, address, title, description, coordinates, onDelete, creatorId} = props
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -27,13 +32,19 @@ const PlaceListItem: FC<IProps> = (props) => {
   const openConfirmHandler = () => setShowConfirmModal(true);
   const closeConfirmModal = () => setShowConfirmModal(false);
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
-    console.log('DELETING...')
+    try {
+      await sendRequest(`http://localhost:5000/api/places/${id}`, 'DELETE')
+    } catch (e) {
+      console.log(e)
+    }
+    onDelete(id)
   }
 
   return (
     <>
+      <ErrorModal onClear={clearError} error={error}/>
       <Modal
         show={showMap}
         onCancel={closeMapHandler}
@@ -61,6 +72,7 @@ const PlaceListItem: FC<IProps> = (props) => {
       </Modal>
       <li className='place-item' key={id}>
         <Card className='place-item__content'>
+          {isLoading && <Spinner asOverlay/>}
           <div className='place-item__image'>
             <img src={image} alt={title}/>
           </div>
@@ -71,7 +83,7 @@ const PlaceListItem: FC<IProps> = (props) => {
           </div>
           <div className='place-item__actions'>
             <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
-            { auth.isLoggedIn && (
+            { auth.userId === creatorId && (
               <>
               <Button to={`/places/${id}`}>EDIT</Button>
               <Button danger onClick={openConfirmHandler}>DELETE</Button>
