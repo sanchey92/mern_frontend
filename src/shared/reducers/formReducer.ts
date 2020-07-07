@@ -1,7 +1,7 @@
 import {Reducer} from "react";
 
 export type inputProperty = {
-  value: string,
+  value: string | any,
   isValid: boolean
 }
 
@@ -11,7 +11,8 @@ export type initialInputsType = {
   description?: inputProperty,
   email?: inputProperty,
   password?: inputProperty,
-  name?: inputProperty
+  name?: inputProperty,
+  image?: inputProperty
 }
 
 export const formReducer: Reducer<any, any> = (state: any, actions: any) => {

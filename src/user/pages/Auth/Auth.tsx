@@ -13,6 +13,7 @@ import {AuthContext} from "../../../shared/context/authContext";
 import Spinner from "../../../shared/components/UIElements/Spinner/Spinner";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
 import {useHttpClient} from "../../../shared/hooks/httpHook/httpHook";
+import ImageUpload from "../../../shared/components/FormElements/ImageUpload/ImageUpload";
 
 const Auth: FC = () => {
 
@@ -34,6 +35,8 @@ const Auth: FC = () => {
   const authSubmitHandler = async (event: FormEvent) => {
     event.preventDefault();
 
+    console.log(formState.inputs);
+
     let responseData;
 
     if (isLoginMode) {
@@ -47,7 +50,7 @@ const Auth: FC = () => {
             password: formState.inputs.password.value
           })
         );
-         auth.login(responseData.user.id)
+        auth.login(responseData.user.id)
       } catch (e) {
       }
     } else {
@@ -71,7 +74,8 @@ const Auth: FC = () => {
     if (!isLoginMode) {
       setFormData({
           ...formState.inputs,
-          name: undefined
+          name: undefined,
+          image: undefined
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid)
     } else {
@@ -79,6 +83,10 @@ const Auth: FC = () => {
           ...formState.inputs,
           name: {
             value: '',
+            isValid: false
+          },
+          image: {
+            value: null,
             isValid: false
           }
         },
@@ -96,6 +104,7 @@ const Auth: FC = () => {
         <h2>Login Required</h2>
         <hr/>
         <form onSubmit={authSubmitHandler}>
+          {!isLoginMode && <ImageUpload id='image' center onInput={inputHandler} errorText={'asd'}/>}
           {
             !isLoginMode &&
             <Input
