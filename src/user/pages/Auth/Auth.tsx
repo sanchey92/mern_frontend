@@ -34,9 +34,6 @@ const Auth: FC = () => {
 
   const authSubmitHandler = async (event: FormEvent) => {
     event.preventDefault();
-
-    console.log(formState.inputs);
-
     let responseData;
 
     if (isLoginMode) {
@@ -44,26 +41,24 @@ const Auth: FC = () => {
         responseData = await sendRequest(
           'http://localhost:5000/api/users/login',
           'POST',
-          {'Content-Type': 'application/json'},
+
           JSON.stringify({
             email: formState.inputs.email.value,
             password: formState.inputs.password.value
-          })
+          }),
+          {'Content-Type': 'application/json'},
         );
         auth.login(responseData.user.id)
       } catch (e) {
       }
     } else {
       try {
-        responseData = await sendRequest('http://localhost:5000/api/users/signup',
-          'POST',
-          {'Content-Type': 'application/json'},
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value
-          })
-        )
+        const formData = new FormData();
+        formData.append('name', formState.inputs.name.value);
+        formData.append('email', formState.inputs.email.value);
+        formData.append('password', formState.inputs.password.value);
+        formData.append('image', formState.inputs.image.value);
+        responseData = await sendRequest('http://localhost:5000/api/users/signup', 'POST', formData)
         auth.login(responseData.user.id)
       } catch (e) {
       }

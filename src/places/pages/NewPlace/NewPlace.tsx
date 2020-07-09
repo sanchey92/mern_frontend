@@ -9,6 +9,7 @@ import {useHttpClient} from "../../../shared/hooks/httpHook/httpHook";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
 import {AuthContext} from "../../../shared/context/authContext";
 import Spinner from "../../../shared/components/UIElements/Spinner/Spinner";
+import ImageUpload from "../../../shared/components/FormElements/ImageUpload/ImageUpload";
 
 const NewPlace: FC = () => {
   const auth = useContext(AuthContext);
@@ -28,6 +29,10 @@ const NewPlace: FC = () => {
       address: {
         value: '',
         isValid: false
+      },
+      image: {
+        value: null,
+        isValid: false
       }
     },
     false)
@@ -35,17 +40,13 @@ const NewPlace: FC = () => {
   const formSubmitHandler = async (event: FormEvent) => {
     event.preventDefault()
     try {
-      await sendRequest(
-        'http://localhost:5000/api/places',
-        'POST',
-        {'Content-Type': 'application/json'},
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          address: formState.inputs.address.value,
-          creator: auth.userId
-        })
-      )
+      const formData = new FormData();
+      formData.append('title', formState.inputs.title.value);
+      formData.append('description', formState.inputs.description.value);
+      formData.append('address', formState.inputs.address.value);
+      formData.append('image', formState.inputs.image.value)
+      formData.append('creator', auth.userId!);
+      await sendRequest('http://localhost:5000/api/places', 'POST', formData);
       history.push('/')
     } catch (e) {
       console.log(e)
@@ -57,6 +58,12 @@ const NewPlace: FC = () => {
       <ErrorModal onClear={clearError} error={error}/>
       <form className='place-form' onSubmit={formSubmitHandler}>
         {isLoading && <Spinner asOverlay/>}
+        <ImageUpload
+          center
+          id='image'
+          onInput={inputHandler}
+          errorText='please provide an image'
+        />
         <Input
           id='title'
           element='input'
