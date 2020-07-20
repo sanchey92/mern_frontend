@@ -48,7 +48,7 @@ const Auth: FC = () => {
           }),
           {'Content-Type': 'application/json'},
         );
-        auth.login(responseData.user.id)
+        auth.login(responseData.userId, responseData.token)
       } catch (e) {
       }
     } else {
@@ -59,7 +59,7 @@ const Auth: FC = () => {
         formData.append('password', formState.inputs.password.value);
         formData.append('image', formState.inputs.image.value);
         responseData = await sendRequest('http://localhost:5000/api/users/signup', 'POST', formData)
-        auth.login(responseData.user.id)
+        auth.login(responseData.userId, responseData.token)
       } catch (e) {
       }
     }
